@@ -1,13 +1,3 @@
-
-Titanium.App.addEventListener('loaded_buildings', function(e)
-{
-	Ti.API.info("EVENT RECEIVED");
-	if (e.buildings) {
-		Ti.API.info("woohoo got buildings: " + e.buildings.length);
-		setSearchBarWithBuildings(e.buildings);
-	}
-});
-
 var buildingsDB = Titanium.Database.install('buildings.sqlite3', 'buildings');
 
 function loadBuildingsMatching(text) {
@@ -47,12 +37,12 @@ var buildingSearchBar = Titanium.UI.createSearchBar({
 	barColor:'#000', 
 	showCancel:true,
 	height:43,
-	top:50
+	top:60
 });
 
 var buildingsTableView = Titanium.UI.createTableView({
 	backgroundColor: '#000',
-	top:88,
+	top:98,
 	visible: false
 });
 
@@ -67,7 +57,7 @@ buildingSearchBar.addEventListener('cancel', function(e) {
 });
 
 buildingSearchBar.addEventListener('change', function(e) {
-	if (buildingSearchBar.value.length > 0) {
+	if (buildingSearchBar.value.length) {
 		var typedChars = buildingSearchBar.value.length;
 		
 		setTimeout(function()
@@ -90,7 +80,6 @@ buildingSearchBar.addEventListener('change', function(e) {
 buildingsTableView.addEventListener('click', function(e) {
 	if (e.rowData) {
 		
-		
 		var buildingAnnotation = Titanium.Map.createAnnotation({
 			latitude: e.rowData.latitude,
 			longitude: e.rowData.longitude,
@@ -98,18 +87,23 @@ buildingsTableView.addEventListener('click', function(e) {
 			subtitle: e.rowData.subtitle,
 			pinImage: 'images/building.png',
 			annotationType:'building',
-			//pincolor:Titanium.Map.ANNOTATION_GREEN,
 			animate:true
 		});
 		
+		mapView.setLocation({
+			latitudeDelta: 0.005,
+			longitudeDelta: 0.005,
+			latitude: e.rowData.latitude,
+			longitude: e.rowData.longitude
+		});
 		
 		if (e.rowData.code.length) {
 			buildingAnnotation.additionalInfo = 'http://www.uh.edu/campus_map/buildings/' + e.rowData.code;
 		}	
 		
-		
 		mapView.addAnnotation(buildingAnnotation);
 		buildingsTableView.visible = false;
+		Ti.UI.Android.hideSoftKeyboard();
 	}
 });
 

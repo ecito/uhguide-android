@@ -1,40 +1,46 @@
 function createTabItem(category) {
+
+	var tabItemView = Titanium.UI.createImageView({
+		image:"images/" + category.default_marker,
+		width:32,
+		height:37
+	});
 	
 	var categoryLabel = Ti.UI.createLabel({
 		text:category.name,
-		font:{fontSize:14},
+		font:{fontSize:10},
 		color:'#fff',
 		width:75,
 		textAlign:'center',
 		height:26,
 		left: 10
 	});
-	var tempView = Ti.UI.createView();
-	
-	tempView.add(categoryLabel);
-	
-	var tabItemView = Ti.UI.createView({
-		backgroundColor:'#990000',
-		top: 5,
-		borderRadius:20,borderWidth:2,borderColor:'#fff',
-		width:categoryLabel.width + 20,
-		height:30
-	});
-	
+	// var tempView = Ti.UI.createView();
+	// 
+	// tempView.add(categoryLabel);
+	// 
+	// var tabItemView = Ti.UI.createView({
+	// 	backgroundColor:'#990000',
+	// 	top: 5,
+	// 	borderRadius:20,borderWidth:2,borderColor:'#fff',
+	// 	width:categoryLabel.width + 20,
+	// 	height:30
+	// });
+	// 
 	tabItemView.category = category;
-
-	tabItemView.add(categoryLabel);
-	
+	// 
+	// tabItemView.add(categoryLabel);
+	// 
 	tabItemView.addEventListener('singletap',function(e) {
 		if (e.source.category) {
 			Ti.API.info("sup " + e.source.category.name);
 			showCategory(category);
 		}
 	});
-	
-	tabItemView.addEventListener('deselect',function(e) {
-
-	});
+	// 
+	// tabItemView.addEventListener('deselect',function(e) {
+	// 
+	// });
 	
 	return tabItemView;
 };
@@ -62,22 +68,16 @@ var rightImage = Ti.UI.createView({
 var scrollView = Titanium.UI.createScrollView({
 	contentHeight:45,
 	contentWidth:1000,
-	top:5,
-	height:45,
-	width:230,
-	borderRadius:10,
-	backgroundColor:'#660000'
-});
-
-var buildingSearch = Titanium.UI.createSearchBar({
-	barColor:'#000', 
-	showCancel:false,
-	height:38,
-	top:0
+	top:0,
+	height:60,
+	width:mapWindow.width - 70,
+	borderRadius:5,
+	borderColor:'#000',
+	borderWidth:2,
+	backgroundColor:'#CCC'
 });
 
 var categoryXHR = Ti.Network.createHTTPClient();
-
 
 actInd.show();
 categoryXHR.onload = function()
@@ -108,8 +108,10 @@ categoryXHR.onload = function()
 
 		scrollView.contentWidth = left;
 		
-		mapWindow.add(leftImage);
-		mapWindow.add(rightImage);
+		if (scrollView.contentWidth > scrollView.width) {
+	 		mapWindow.add(leftImage);
+			mapWindow.add(rightImage);
+		}
 		mapWindow.add(scrollView);
 		
 	} catch(exception) {
@@ -132,20 +134,13 @@ scrollView.addEventListener('scroll', function(e)
 {
 	Ti.API.info('x ' + e.x + ' y ' + e.y);
 	
-	if (e.x > 50)
-	{
+	if (e.x > 50) {
 		leftImage.show();
-	}
-	else
-	{
+	} else {
 		leftImage.hide();
-	}
-	if (e.x < 190)
-	{
+	} if (e.x < 190) {
 		rightImage.show();
-	}
-	else
-	{
+	} else {
 		rightImage.hide();
 	}
 

@@ -182,7 +182,7 @@ weatherWindow.add(weatherBGView);
 var webcamURL = "http://images.webcams.travel/webcam/1239991620.jpg";
 
 var webcamView = Ti.UI.createImageView({
-	bottom:0,
+	bottom:10,
 	width:264,
 	height:198,
 	image: webcamURL

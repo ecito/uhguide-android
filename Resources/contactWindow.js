@@ -21,7 +21,7 @@ var nameLabel = Ti.UI.createLabel({
 });
 contactWindow.add(nameLabel);
 
-if (person.title == null) {
+if (person.title === null) {
 	person.title = '';
 }
 var titleLabel = Ti.UI.createLabel({
@@ -37,26 +37,11 @@ var titleLabel = Ti.UI.createLabel({
 });
 contactWindow.add(titleLabel);
 
-function sendEmailTo(email) {
-	var emailDialog = Titanium.UI.createEmailDialog();
-    emailDialog.setSubject('Hello');
-    emailDialog.setToRecipients([email]);
-
-    emailDialog.addEventListener('complete',function(e)
-    {
-        if (e.result != emailDialog.SENT) {
-            alert("E-mail was not sent. " + e.result);
-        }
-    });
-    emailDialog.open();
-	
-};
-
 if (person.buildingname) {
 	person.at = person.buildingname + ' ' + person.roomnumber;
 }
 attributes = ["telephonenumber", "mail", "at"];
-pretty_names = ["Phone", "E-mail", "At"];
+pretty_names = ["Phone", "E-mail", "Location"];
 
 for (var x = 0; x < attributes.length; x++) {
 	if (person[attributes[x]]) {
@@ -79,7 +64,11 @@ for (var x = 0; x < attributes.length; x++) {
 				fontFamily:'Helvetica Neue',
 				fontWeight:'bold'
 			},
-			height:'auto', left:10, right:10, top:8});
+			height:'auto',
+			left:10,
+			right:10,
+			top:8
+		});
 	
 		var attributeTextLabel = Ti.UI.createLabel({
 			text:person[attributes[x]],
@@ -88,16 +77,21 @@ for (var x = 0; x < attributes.length; x++) {
 				fontFamily:'Helvetica Neue',
 				fontWeight:'bold'
 			},
-			height:'auto', textAlign:'right', width:'auto', right:10, top: 8});
+			height:'auto',
+			textAlign:'right',
+			width:200,
+			right:10,
+			top:8
+		});
 	
 	
 		attributeCell.add(attributeTitleLabel);
 		attributeCell.add(attributeTextLabel);
 		
-		if (attributes[x] == 'mail') {
-			attributeCell.addEventListener('click',function(e) {
-				sendEmailTo(person[attributes[x]]);
-			});
+		if (attributes[x] === 'mail') {
+			attributeTextLabel.autoLink = Ti.UI.Android.LINKIFY_EMAIL_ADDRESSES;
+		} else if (attributes[x] === 'telephonenumber') {
+			attributeTextLabel.autoLink = Ti.UI.Android.LINKIFY_PHONE_NUMBERS;
 		}
 	}
 }

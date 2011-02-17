@@ -78,7 +78,7 @@ prezTweetXHR.onerror = function(e) {
 	alert("There was an error retrieving the points of interest");
 };
 
-url = "http://search.twitter.com/search.json?q=from%3AUHPres&rpp=1"
+url = "http://search.twitter.com/search.json?q=from%3AUHPres&rpp=1";
 prezTweetXHR.open('GET',url);
 prezTweetXHR.send();
 

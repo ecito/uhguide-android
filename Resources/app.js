@@ -3,8 +3,10 @@ Titanium.UI.setBackgroundColor('#fff');
 
 var launcher = Titanium.UI.createWindow({  
     title:'UH Guide',
+	fullscreen: false,
     backgroundColor:'#fff',
-	exitOnClose: true
+	exitOnClose: true,
+	orientationModes: [Titanium.UI.PORTRAIT]
 });
 
 var bottomLogo = Titanium.UI.createImageView({
@@ -90,11 +92,11 @@ for (var w = 0; w < windows.length; w++) {
 	launcherItem.addEventListener('click',function(e) {
 		Ti.API.info("Clicked an item! " + e.source.text + " - " + e.source.windowInfo.title);
 		var newWindow = Titanium.UI.createWindow({  
-			modal:true,
 			url:e.source.windowInfo.source,
 		    title:e.source.windowInfo.title,
 		    backgroundColor:'#ccc',
-			fullscreen: false
+			fullscreen: false,
+			orientationModes: [Titanium.UI.PORTRAIT]
 		});
 		newWindow.open();
 	});

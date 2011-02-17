@@ -13,14 +13,16 @@ var directoryTableView = Titanium.UI.createTableView({
 directoryWindow.add(directoryTableView);
 
 directoryTableView.addEventListener('click', function(e) {
-	var win = Titanium.UI.createWindow({
-	  url:'contactWindow.js',
-	  title: e.title,
-	  fullscreen: false,
-	  backgroundColor:'#fff'
-	});
-	win.person = e.rowData.person;
-	win.open ({animated: true});
+	if (e.rowData.person) {
+		var win = Titanium.UI.createWindow({
+		  url:'contactWindow.js',
+		  title: e.title,
+		  fullscreen: false,
+		  backgroundColor:'#fff'
+		});
+		win.person = e.rowData.person;
+		win.open ({animated: true});
+	}
 });
 
 function sortByLastName(a, b) {
@@ -57,7 +59,6 @@ directoryXHR.onload = function() {
 			currentHeader = person.sn.charAt(0).toUpperCase();
 			fetchedData.push({
 				title:person.givenname + ' ' + person.sn, 
-				subtitle:"sup niggas",
 				hasChild:true, 
 				header:person.sn.charAt(0),
 				person:person
@@ -82,7 +83,7 @@ directoryXHR.onerror = function(e) {
 };
 
 function searchText(text) {
-	directoryXHR.abort;
+	directoryXHR.abort();
 	if(text.length > 3) {
 		Ti.API.info("Searching.. " + encodeURI(text));
 		var searchURL = 'http://uhcamp.us.to/people/search?name=' + encodeURI(text);
